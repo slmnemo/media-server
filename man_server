@@ -1,0 +1,26 @@
+#!/bin/bash
+
+SERVER_NAME=default
+INSTANCE_NAME=default
+
+case $1 in
+	"start")	
+		./docker_start.sh
+		echo started server successfully!
+		;;
+
+	"restart")
+		docker-compose restart
+		echo "Restarted server!"
+		;;
+
+	"stop")
+		docker-compose stop
+		echo "Stopped docker server"
+		;;
+
+	*)
+		echo "Invalid parameter specified"
+		;;
+esac
+

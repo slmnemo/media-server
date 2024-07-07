@@ -1,0 +1,122 @@
+version: '3.7'
+services:
+  jellyfin:
+    container_name: jellyfin
+    image: jellyfin/jellyfin
+    restart: unless-stopped
+    ports:
+      - "8096:8096"
+    environment:
+      - PUID=${DUID}
+      - PGID=${DGID}
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - /home/share/media-server/data/config/jellyfin:/config
+      - /home/share/media-server/data:/data
+    healthcheck:
+      test: nvidia-smi || kill 1
+      interval: 300s
+      retries: 5
+      start_period: 120s
+      timeout: 1s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  sonarr:
+    image: ghcr.io/hotio/sonarr
+    container_name: sonarr
+    restart: unless-stopped
+    ports:
+      - "8989:8989"
+    environment:
+      - PUID=${DUID}
+      - PGID=${DGID}
+      - UMASK=002 # Single user
+      - TZ=Etc/UTC
+    volumes:
+      - /home/share/media-server/data/config/sonarr:/config
+      - /home/share/media-server/data:/data
+
+  radarr:
+    image: ghcr.io/hotio/radarr
+    container_name: radarr
+    restart: unless-stopped
+    ports:
+      - "7878:7878"
+    environment:
+      - PUID=${DUID}
+      - PGID=${DGID}
+      - UMASK=002 # Single user
+      - TZ=Etc/UTC
+    volumes:
+      - /home/share/media-server/data/config/radarr:/config
+      - /home/share/media-server/data:/data
+
+  readarr:
+    image: ghcr.io/hotio/readarr
+    container_name: readarr
+    restart: unless-stopped
+    ports:
+      - "8787:8787"
+    environment:
+      - PUID=${DUID}
+      - PGID=${DGID}
+      - UMASK=002 # Single user
+      - TZ=Etc/UTC
+    volumes:
+      - /home/share/media-server/data/config/readarr:/config
+      - /home/share/media-server/data:/data
+
+  lidarr:
+    image: ghcr.io/hotio/lidarr
+    container_name: lidarr
+    restart: unless-stopped
+    ports:
+      - "8686:8686"
+    environment:
+      - PUID=${DUID}
+      - PGID=${DGID}
+      - UMASK=002 # Single user
+      - TZ=Etc/UTC
+    volumes:
+      - /home/share/media-server/data/config/lidarr:/config
+      - /home/share/media-server/data:/data
+
+  jellyseerr:
+    image: ghcr.io/hotio/jellyseerr
+    container_name: jellyseerr
+    restart: unless-stopped
+    ports:
+      - "5055:5055"
+    environment:
+      - PUID=${DUID}
+      - PGID=${DGID}
+      - UMASK=002 # Single user
+      - TZ=Etc/UTC
+    volumes:
+      - /home/share/media-server/data/config/jellyseerr:/config
+
+  deluge:
+    image: lscr.io/linuxserver/deluge:latest
+    container_name: deluge
+    environment:
+      - PUID=${DUID}
+      - PGID=${DGID}
+      - UMASK=002
+      - TZ=Etc/UTC
+      - DELUGE_LOGLEVEL=error
+    volumes:
+      - /home/share/media-server/data/config/deluge:/config
+      - /home/share/media-server/data/torrents:/data/torrents
+    ports:
+      - 8112:8112
+      - 6881:6881
+      - 6881:6881/udp
+      - 58846:58846
+    restart: unless-stopped
