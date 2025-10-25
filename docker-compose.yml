@@ -60,20 +60,20 @@ services:
       - /srv/media-server/data/config/radarr:/config
       - /srv/media-server/data:/data
 
-  readarr:
-    image: ghcr.io/hotio/readarr
-    container_name: readarr
-    restart: unless-stopped
-    ports:
-      - "8787:8787"
-    environment:
-      - PUID=${DUID}
-      - PGID=${DGID}
-      - UMASK=002 # Single user
-      - TZ=Etc/UTC
-    volumes:
-      - /srv/media-server/data/config/readarr:/config
-      - /srv/media-server/data:/data
+  # readarr:
+  #   image: ghcr.io/hotio/readarr
+  #   container_name: readarr
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8787:8787"
+  #   environment:
+  #     - PUID=${DUID}
+  #     - PGID=${DGID}
+  #     - UMASK=002 # Single user
+  #     - TZ=Etc/UTC
+  #   volumes:
+  #     - /srv/media-server/data/config/readarr:/config
+  #     - /srv/media-server/data:/data
 
   lidarr:
     image: ghcr.io/hotio/lidarr
