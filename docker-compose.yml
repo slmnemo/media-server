@@ -10,9 +10,8 @@ services:
     group_add:
       - ${RENDER_ID}
       - ${VIDEO_ID}
+    user: ${DUID}:${DGID}
     environment:
-      - PUID=${DUID}
-      - PGID=${DGID}
       - UMASK=002
       - TZ=Etc/UTC
       - ROC_ENABLE_PRE_VEGA=1
