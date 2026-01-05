@@ -1,12 +1,26 @@
-### Instructions
-Use script `get_modpack.sh `to download the modpack from a URL under `./modpacks/modpack.zip`. 
+# Introduction
 
-Once that is done, run the script `docker_start.sh` to run the server based on the docker-compose.yml parameters.
+This repo is a simple docker container interface as well as an initial scaffold for the data structure used in my home
+server.
 
-You may need to configure the docker-compose.yml paramters to get it to work correctly.
+The instructions to run the server are located in [Instructions].
 
-## Advanced instructions
+Default ports are used for all the included media server goodies. The included media server backend websites are
 
-The server\_manager.sh script can be used to `install`, `start`, `restart`, or `stop` the server by passing the appropriate keyword after invoking the script. 
+- Jellyfin
+- Jellyseerr
+- *arr Suite
+- Deluge Torrent Client
 
-Restarting an existing server can be automated using the scheduled\_restart.sh script and crontab.
+## Instructions
+
+Edit `env_uuid_setup.sh` to use the same permissions (UUID/GUID) as the `data/` directory
+
+Launch the container by executing the command `./man_server start`.
+
+Make sure to secure all the logins to each website **before** exposing this to the open web!
+
+### Automating Server Restarts
+
+Restarting an existing server can be automated by calling the `man_server` CLI interface
+utility with the option `restart`.
