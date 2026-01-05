@@ -7,14 +7,10 @@ services:
     ports:
       - "8096:8096"
       - "8920:8920"
-    group_add:
-      - ${RENDER_ID}
-      - ${VIDEO_ID}
     user: ${DUID}:${DGID}
     environment:
       - UMASK=002
       - TZ=Etc/UTC
-      - ROC_ENABLE_PRE_VEGA=1
       # Required defines for where different things live
       - JELLYFIN_CACHE_DIR=/var/cache/jellyfin
       - JELLYFIN_CONFIG_DIR=/etc/jellyfin
@@ -26,8 +22,6 @@ services:
       - /srv/media-server/data/jellyfin_data:/var/lib/jellyfin
       - /srv/media-server/data/config/jellyfin:/etc/jellyfin
       - /srv/media-server/data:/data
-    devices:
-      - /dev/dri/renderD128:/dev/dri/renderD128
 
   sonarr:
     image: ghcr.io/hotio/sonarr
