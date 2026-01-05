@@ -2,15 +2,11 @@
 
 # Wrapper script to import user settings, call docker based on docker-compose.yaml and then background it.
 
-DUID=$(getent passwd server | cut -d: -f3)
-DGID=$(getent group server | cut -d: -f3)
-RENDER_ID=$(getent group render | cut -d: -f3)
-VIDEO_ID=$(getent group video | cut -d: -f3)
+# Enter current script directory before executing other commands
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+cd "${SCRIPT_DIR}" || return
 
-export DUID
-export DGID
-export RENDER_ID
-export VIDEO_ID
+source env_uuid_setup.sh
 
 echo Running as user ${DUID} with group ${DGID}
 

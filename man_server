@@ -1,26 +1,31 @@
 #!/bin/bash
 
-SERVER_NAME=default
-INSTANCE_NAME=default
+# Enter current script directory before executing other commands
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+cd "${SCRIPT_DIR}" || return
+
+source env_uuid_setup.sh
 
 case $1 in
-	"start")	
-		./docker_start.sh
-		echo started server successfully!
-		;;
+"start")
+  docker compose up -d
+  echo "Running as user ${DUID} with group ${DGID}"
+  echo started server successfully!
+  ;;
 
-	"restart")
-		./restart_server.sh
-		echo "Restarted server!"
-		;;
+"restart")
+  docker compose restart
+  echo "Restarting as user ${DUID} with group ${DGID}"
+  echo "Restarted server!"
+  ;;
 
-	"stop")
-		docker-compose stop
-		echo "Stopped docker server"
-		;;
+"stop")
+  docker compose stop
+  echo "Stopping as user ${DUID} with group ${DGID}"
+  echo "Stopped docker server"
+  ;;
 
-	*)
-		echo "Invalid parameter specified"
-		;;
+*)
+  echo "Invalid parameter specified"
+  ;;
 esac
-
