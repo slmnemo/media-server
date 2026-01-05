@@ -16,6 +16,11 @@ Default ports are used for all the included media server goodies. The included m
 
 Edit `env_uuid_setup.sh` to use the same permissions (UUID/GUID) as the `data/` directory
 
+Edit `docker-compose.yml`'s Jellyfin instance to use the correct GPU interface, instructions for this can be found on
+the Jellyfin website for each of the different GPUs. (The repo is configured for AMD GPUs)
+
+If you wish to not use a GPU, switch to the `no_gpu` branch.
+
 Launch the container by executing the command `./man_server start`.
 
 Make sure to secure all the logins to each website **before** exposing this to the open web!
