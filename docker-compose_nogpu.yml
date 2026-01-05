@@ -1,21 +1,27 @@
-version: '3.7'
-name: media
-
+version: "3.7"
 services:
   jellyfin:
     container_name: jellyfin
-    image: ghcr.io/hotio/jellyfin
+    image: jellyfin/jellyfin
     restart: unless-stopped
     ports:
       - "8096:8096"
+      - "8920:8920"
+    user: ${DUID}:${DGID}
     environment:
-      - PUID=${DUID}
-      - PGID=${DGID}
       - UMASK=002
       - TZ=Etc/UTC
+      # Required defines for where different things live
+      - JELLYFIN_CACHE_DIR=/var/cache/jellyfin
+      - JELLYFIN_CONFIG_DIR=/etc/jellyfin
+      - JELLYFIN_DATA_DIR=/var/lib/jellyfin
+      - JELLYFIN_LOG_DIR=/var/log/jellyfin
     volumes:
-      - /home/share/media-server/data/config/jellyfin:/config
-      - /home/share/media-server/data:/data
+      - /srv/media-server/data/jellyfin_log:/var/log/jellyfin
+      - /srv/media-server/data/jellyfin_cache:/var/cache/jellyfin
+      - /srv/media-server/data/jellyfin_data:/var/lib/jellyfin
+      - /srv/media-server/data/config/jellyfin:/etc/jellyfin
+      - /srv/media-server/data:/data
 
   sonarr:
     image: ghcr.io/hotio/sonarr
@@ -29,8 +35,8 @@ services:
       - UMASK=002 # Single user
       - TZ=Etc/UTC
     volumes:
-      - /home/share/media-server/data/config/sonarr:/config
-      - /home/share/media-server/data:/data
+      - /srv/media-server/data/config/sonarr:/config
+      - /srv/media-server/data:/data
 
   radarr:
     image: ghcr.io/hotio/radarr
@@ -44,23 +50,23 @@ services:
       - UMASK=002 # Single user
       - TZ=Etc/UTC
     volumes:
-      - /home/share/media-server/data/config/radarr:/config
-      - /home/share/media-server/data:/data
+      - /srv/media-server/data/config/radarr:/config
+      - /srv/media-server/data:/data
 
-  readarr:
-    image: ghcr.io/hotio/readarr
-    container_name: readarr
-    restart: unless-stopped
-    ports:
-      - "8787:8787"
-    environment:
-      - PUID=${DUID}
-      - PGID=${DGID}
-      - UMASK=002 # Single user
-      - TZ=Etc/UTC
-    volumes:
-      - /home/share/media-server/data/config/readarr:/config
-      - /home/share/media-server/data:/data
+  # readarr:
+  #   image: ghcr.io/hotio/readarr
+  #   container_name: readarr
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8787:8787"
+  #   environment:
+  #     - PUID=${DUID}
+  #     - PGID=${DGID}
+  #     - UMASK=002 # Single user
+  #     - TZ=Etc/UTC
+  #   volumes:
+  #     - /srv/media-server/data/config/readarr:/config
+  #     - /srv/media-server/data:/data
 
   lidarr:
     image: ghcr.io/hotio/lidarr
@@ -74,8 +80,8 @@ services:
       - UMASK=002 # Single user
       - TZ=Etc/UTC
     volumes:
-      - /home/share/media-server/data/config/lidarr:/config
-      - /home/share/media-server/data:/data
+      - /srv/media-server/data/config/lidarr:/config
+      - /srv/media-server/data:/data
 
   jellyseerr:
     image: ghcr.io/hotio/jellyseerr
@@ -89,7 +95,21 @@ services:
       - UMASK=002 # Single user
       - TZ=Etc/UTC
     volumes:
-      - /home/share/media-server/data/config/jellyseerr:/config
+      - /srv/media-server/data/config/jellyseerr:/config
+
+  prowlarr:
+    image: ghcr.io/hotio/prowlarr
+    container_name: prowlarr
+    restart: unless-stopped
+    ports:
+      - "9696:9696"
+    environment:
+      - PUID=${DUID}
+      - PGID=${DGID}
+      - UMASK=002 # Single user
+      - TZ=Etc/UTC
+    volumes:
+      - /srv/media-server/data/config/prowlarr:/config
 
   deluge:
     image: lscr.io/linuxserver/deluge:latest
@@ -101,8 +121,8 @@ services:
       - TZ=Etc/UTC
       - DELUGE_LOGLEVEL=error
     volumes:
-      - /home/share/media-server/data/config/deluge:/config
-      - /home/share/media-server/data/torrents:/data/torrents
+      - /srv/media-server/data/config/deluge:/config
+      - /srv/media-server/data/torrents:/data/torrents
     ports:
       - 8112:8112
       - 6881:6881
