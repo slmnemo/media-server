@@ -90,7 +90,7 @@ services:
       - /srv/media-server/data:/data
 
   jellyseerr:
-    image: ghcr.io/hotio/jellyseerr
+    image: fallenbagel/jellyseerr:latest
     container_name: jellyseerr
     restart: unless-stopped
     ports:
